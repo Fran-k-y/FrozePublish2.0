@@ -5,36 +5,54 @@
     <title>frozePublish Mobile</title>
     <style>
         body { background: #0f0f0f; color: white; font-family: sans-serif; text-align: center; padding: 15px; }
-        .app-container { background: #1a1a1a; border-radius: 20px; padding: 25px; border: 1px solid #333; max-width: 400px; margin: auto; }
+        .app-container { background: #1a1a1a; border-radius: 20px; padding: 20px; border: 1px solid #333; max-width: 400px; margin: auto; }
         .nav { display: flex; gap: 10px; margin-bottom: 20px; background: #252525; padding: 5px; border-radius: 12px; }
         .nav-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; background: none; color: #777; font-weight: bold; }
         .nav-btn.active { background: #00ff00; color: black; }
         input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid #444; background: #111; color: white; box-sizing: border-box; }
-        .main-btn { width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .main-btn { width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; }
         .btn-u { background: #00ff00; color: black; }
         .btn-p { background: #0088ff; color: white; }
-        #log { margin-top: 20px; padding: 15px; border-radius: 10px; background: #222; font-size: 13px; display: none; text-align: left; }
+
+        /* THE LOG BOX */
+        #log { 
+            margin-top: 20px; padding: 15px; border-radius: 10px; background: #000; 
+            font-family: monospace; font-size: 12px; text-align: left; min-height: 120px;
+            border: 1px solid #333; overflow-y: auto;
+        }
+        .log-success { color: #00ff00; } /* Green */
+        .log-error { color: #ffff00; }   /* Yellow */
+        .log-fail { color: #ff4444; }    /* Red */
     </style>
 </head>
 <body>
     <div class="app-container">
-        <h2 style="color:#00ff00;">Studio Lite</h2>
+        <h2 style="color:#00ff00; margin-bottom:5px;">Studio Lite</h2>
+        <input type="password" id="apiKey" placeholder="Paste Roblox API Key Here">
+
         <div class="nav">
-            <button class="nav-btn active" id="btnU" onclick="show('u')">Universe</button>
-            <button class="nav-btn" id="btnP" onclick="show('p')">Place</button>
+            <button class="nav-btn active" id="btnU" onclick="showTab('u')">Universe</button>
+            <button class="nav-btn" id="btnP" onclick="showTab('p')">Place</button>
         </div>
 
         <div id="sec-u">
-            <p>Create experience: <b>frozePublish</b></p>
-            <button class="main-btn btn-u" onclick="trigger('/create-universe')">GENERATE UNIVERSE</button>
+            <p style="font-size:13px; color:#aaa;">Target: <b style="color:#00ff00;">frozePublish</b></p>
+            <button class="main-btn btn-u" onclick="createUniverse()">START CREATING</button>
         </div>
 
         <div id="sec-p" style="display:none;">
-            <p>Add place to existing ID:</p>
-            <input type="text" id="uniId" placeholder="Universe ID">
+            <input type="text" id="uniId" placeholder="Enter Universe ID">
             <button class="main-btn btn-p" onclick="addPlace()">ADD NEW PLACE</button>
         </div>
 
+        <div id="log">
+            <div style="color:#555;">> System Online. Waiting...</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
         <div id="log"></div>
     </div>
 
