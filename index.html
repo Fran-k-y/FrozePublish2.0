@@ -4,22 +4,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Studio Lite Mobile</title>
     <style>
-        body { background: #0f0f0f; color: white; font-family: sans-serif; text-align: center; padding: 15px; }
-        .app-container { background: #1a1a1a; border-radius: 20px; padding: 20px; border: 1px solid #333; max-width: 400px; margin: auto; }
+        body { background: #0b0b0b; color: white; font-family: sans-serif; text-align: center; padding: 15px; }
+        .app-container { background: #161616; border-radius: 24px; padding: 20px; border: 1px solid #222; max-width: 400px; margin: auto; box-shadow: 0 15px 35px rgba(0,0,0,0.7); }
+        h2 { color: #00ff00; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
         
-        .nav { display: flex; gap: 10px; margin-bottom: 20px; background: #252525; padding: 5px; border-radius: 12px; }
-        .nav-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; background: none; color: #777; font-weight: bold; }
+        input { width: 100%; padding: 14px; margin: 8px 0; border-radius: 12px; border: 1px solid #333; background: #000; color: white; box-sizing: border-box; outline: none; }
+        input:focus { border-color: #00ff00; }
+
+        .nav { display: flex; gap: 8px; margin: 20px 0; background: #222; padding: 5px; border-radius: 14px; }
+        .nav-btn { flex: 1; padding: 10px; border: none; border-radius: 10px; background: none; color: #666; font-weight: bold; cursor: pointer; }
         .nav-btn.active { background: #00ff00; color: black; }
 
-        input { width: 100%; padding: 15px; margin: 8px 0; border-radius: 10px; border: 1px solid #444; background: #111; color: white; box-sizing: border-box; }
-        .main-btn { width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .main-btn { width: 100%; padding: 16px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 12px; }
         .btn-u { background: #00ff00; color: black; }
         .btn-p { background: #0088ff; color: white; }
 
         #log { 
-            margin-top: 20px; padding: 15px; border-radius: 10px; background: #000; 
-            font-family: monospace; font-size: 12px; text-align: left; min-height: 120px;
-            border: 1px solid #333; overflow-y: auto;
+            margin-top: 25px; padding: 15px; border-radius: 14px; background: #000; 
+            font-family: monospace; font-size: 11px; text-align: left; 
+            min-height: 140px; border: 1px solid #222; overflow-y: auto;
         }
         .log-success { color: #00ff00; } 
         .log-error { color: #ffff00; }   
@@ -28,9 +31,9 @@
 </head>
 <body>
     <div class="app-container">
-        <h2 style="color:#00ff00;">Studio Lite</h2>
+        <h2>STUDIO LITE</h2>
         
-        <input type="password" id="apiKey" placeholder="Paste Roblox API Key">
+        <input type="password" id="apiKey" placeholder="Paste Your New API Key">
 
         <div class="nav">
             <button class="nav-btn active" id="btnU" onclick="showTab('u')">Universe</button>
@@ -38,147 +41,20 @@
         </div>
 
         <div id="sec-u">
-            <input type="text" id="expName" placeholder="Experience Name (e.g. My Game)">
-            <button class="main-btn btn-u" onclick="createUniverse()">CREATE EXPERIENCE</button>
+            <input type="text" id="expName" placeholder="Experience Name">
+            <button class="main-btn btn-u" onclick="createUniverse()">GENERATE EXPERIENCE</button>
         </div>
 
         <div id="sec-p" style="display:none;">
-            <input type="text" id="uniId" placeholder="Target Universe ID">
-            <button class="main-btn btn-p" onclick="addPlace()">ADD TO UNIVERSE</button>
+            <input type="text" id="uniId" placeholder="Paste Universe ID">
+            <button class="main-btn btn-p" onclick="addPlace()">ADD START PLACE</button>
         </div>
 
         <div id="log">
-            <div style="color:#555;">> System Ready...</div>
+            <div style="color:#444;">> Waiting for API Key...</div>
         </div>
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
-        <div id="sec-u">
-            <p style="font-size:13px; color:#aaa;">Target: <b style="color:#00ff00;">frozePublish</b></p>
-            <button class="main-btn btn-u" onclick="createUniverse()">START CREATING</button>
-        </div>
-
-        <div id="sec-p" style="display:none;">
-            <input type="text" id="uniId" placeholder="Enter Universe ID">
-            <button class="main-btn btn-p" onclick="addPlace()">ADD NEW PLACE</button>
-        </div>
-
-        <div id="log">
-            <div style="color:#555;">> System Online. Waiting...</div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
-        <div id="log"></div>
-    </div>
-
-    <script>
-        function show(t) {
-            document.getElementById('sec-u').style.display = t === 'u' ? 'block' : 'none';
-            document.getElementById('sec-p').style.display = t === 'p' ? 'block' : 'none';
-            document.getElementById('btnU').className = t === 'u' ? 'nav-btn active' : 'nav-btn';
-            document.getElementById('btnP').className = t === 'p' ? 'nav-btn active' : 'nav-btn';
-        }
-
-        async function trigger(url) {
-            const log = document.getElementById('log');
-            log.style.display = 'block';
-            log.innerHTML = "⏳ Connecting to Roblox Cloud...";
-            try {
-                const r = await fetch(url);
-                const d = await r.json();
-                log.innerHTML = "<b style='color:#00ff00'>[SUCCESS]</b><br>ID: " + (d.universeId || d.placeId || "Task Sent");
-            } catch (e) {
-                log.innerHTML = "<b style='color:#ff4444'>[ERROR]</b><br>Check Replit Secrets/API Key";
-            }
-        }
-
-        function addPlace() {
-            const id = document.getElementById('uniId').value;
-            if(!id) return alert("Missing ID");
-            trigger('/create-place?universeId=' + id);
-        }
-    </script>
-</body>
-</html>            <button class="btn btn-uni" onclick="run('/create-universe')">CREATE UNIVERSE</button>
-        </div>
-
-        <div id="view-p" style="display:none;">
-            <p style="color:#aaa;">Add a new place to an existing experience</p>
-            <input type="text" id="targetId" placeholder="Universe ID (e.g. 12345678)">
-            <button class="btn btn-place" onclick="addPlace()">ADD PLACE</button>
-        </div>
-
-        <div id="status"></div>
-    </div>
-
-    <script>
-        function setTab(t) {
-            document.getElementById('view-u').style.display = t === 'u' ? 'block' : 'none';
-            document.getElementById('view-p').style.display = t === 'p' ? 'block' : 'none';
-            document.getElementById('tab-u').className = t === 'u' ? 'tab active' : 'tab';
-            document.getElementById('tab-p').className = t === 'p' ? 'tab active' : 'tab';
-        }
-
-        async function run(url) {
-            const out = document.getElementById('status');
-            out.style.display = 'block';
-            out.innerHTML = '⚙️ SENDING TASK TO ROBLOX CLOUD...';
-            
-            try {
-                const res = await fetch(url);
-                const data = await res.json();
-                if(data.universeId || data.placeId) {
-                   out.style.borderColor = '#00ff00';
-                   out.innerHTML = '<b style="color:#00ff00;">[SUCCESS]</b><br>ID: ' + (data.universeId || data.placeId);
-                } else {
-                   throw new Error();
-                }
-            } catch (e) {
-                out.style.borderColor = '#ff4444';
-                out.innerHTML = '<b style="color:#ff4444;">[FAILED]</b><br>Check API Key Permissions in Dashboard';
-            }
-        }
-
-        function addPlace() {
-            const id = document.getElementById('targetId').value;
-            if(!id) return alert("Enter Universe ID!");
-            run('/create-place?universeId=' + id);
-        }
-    </script>
-</body>
-</html>
-`;
-
-// --- THE BRAIN ---
-
-app.get('/', (req, res) => res.send(HTML_CONTENT));
-
-app.get('/create-universe', async (req, res) => {
-    try {
-        const response = await axios.post(
-            'https://apis.roblox.com/universes/v1/universes',
-            { "templatePlaceId": TEMPLATE_ID, "displayName": "frozePublish" },
-            { headers: { 'x-api-key': API_KEY, 'Content-Type': 'application/json' } }
-        );
-        res.json(response.data);
-    } catch (err) { res.status(500).json({ err: "API Error" }); }
-});
-
-app.get('/create-place', async (req, res) => {
-    const { universeId } = req.query;
-    try {
-        const response = await axios.post(
-            `https://apis.roblox.com/universes/v1/universes/${universeId}/places`,
-            { "templatePlaceId": TEMPLATE_ID },
-            { headers: { 'x-api-key': API_KEY, 'Content-Type': 'application/json' } }
-        );
-        res.json(response.data);
-    } catch (err) { res.status(500).json({ err: "API Error" }); }
-});
-
-app.listen(3000, () => console.log("Studio Lite V1 Ready"));
