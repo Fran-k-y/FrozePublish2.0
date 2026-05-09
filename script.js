@@ -1,5 +1,6 @@
-const PROXY = "https://corsproxy.io/?";
 const TEMPLATE_ID = 95206881;
+// This is a more stable proxy for Roblox API calls
+const PROXY = "https://api.allorigins.win/raw?url=";
 
 function setMode(m) {
     document.getElementById('sec-u').style.display = m === 'u' ? 'block' : 'none';
@@ -17,46 +18,75 @@ function addLog(text, type) {
 }
 
 async function runCreate() {
-    const key = document.getElementById('apiKey').value;
-    const name = document.getElementById('expName').value || "New Game";
-    if(!key) return addLog("MISSING API KEY", "error");
+    const key = document.getElementById('apiKey').value.trim();
+    const name = document.getElementById('expName').value || "New Mobile Experience";
+    
+    if(!key) return addLog("ERROR: NO KEY ENTERED", "error");
+    addLog(`INIT: Creating Universe "${name}"...`, "");
 
-    addLog(`Creating Universe: ${name}...`);
     try {
-        const url = PROXY + encodeURIComponent('https://apis.roblox.com/universes/v1/universes');
-        const res = await fetch(url, {
+        const robloxUrl = 'https://apis.roblox.com/universes/v1/universes';
+        const finalUrl = PROXY + encodeURIComponent(robloxUrl);
+
+        const response = await fetch(finalUrl, {
             method: 'POST',
-            headers: { 'x-api-key': key, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ "templatePlaceId": TEMPLATE_ID, "displayName": name })
+            headers: {
+                'x-api-key': key,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "templatePlaceId": TEMPLATE_ID,
+                "displayName": name
+            })
         });
-        const data = await res.json();
+
+        // Some proxies return text instead of JSON if they fail
+        const text = await response.text();
+        let data;
+        try { data = JSON.parse(text); } catch(e) { data = { error: text }; }
+
         if(data.universeId) {
-            addLog(`SUCCESS! Universe ID: ${data.universeId}`, "success");
+            addLog(`SUCCESS! UNIVERSE ID: ${data.universeId}`, "success");
             document.getElementById('targetUniId').value = data.universeId;
         } else {
-            addLog("FAILED: " + (data.message || "Check Permissions"), "fail");
+            console.log(data);
+            addLog("PERMISSION DENIED: Refresh key or check IP toggle.", "fail");
         }
-    } catch (e) { addLog("CONNECTION ERROR", "error"); }
+    } catch (e) {
+        addLog("NETWORK ERROR: Proxy is busy. Wait 5s.", "error");
+    }
 }
 
 async function runAddPlace() {
-    const key = document.getElementById('apiKey').value;
-    const uniId = document.getElementById('targetUniId').value;
-    if(!key || !uniId) return addLog("MISSING KEY OR UNIVERSE ID", "error");
+    const key = document.getElementById('apiKey').value.trim();
+    const uniId = document.getElementById('targetUniId').value.trim();
+    
+    if(!key || !uniId) return addLog("ERROR: MISSING DATA", "error");
+    addLog(`INIT: Adding Place to ${uniId}...`, "");
 
-    addLog(`Adding Place to Universe ${uniId}...`);
     try {
-        const url = PROXY + encodeURIComponent(`https://apis.roblox.com/universes/v1/universes/${uniId}/places`);
-        const res = await fetch(url, {
+        const robloxUrl = `https://apis.roblox.com/universes/v1/universes/${uniId}/places`;
+        const finalUrl = PROXY + encodeURIComponent(robloxUrl);
+
+        const response = await fetch(finalUrl, {
             method: 'POST',
-            headers: { 'x-api-key': key, 'Content-Type': 'application/json' },
+            headers: {
+                'x-api-key': key,
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({ "templatePlaceId": TEMPLATE_ID })
         });
-        const data = await res.json();
+
+        const text = await response.text();
+        let data;
+        try { data = JSON.parse(text); } catch(e) { data = { error: text }; }
+
         if(data.placeId) {
-            addLog(`SUCCESS! Place ID: ${data.placeId}`, "success");
+            addLog(`SUCCESS! PLACE ID: ${data.placeId}`, "success");
         } else {
-            addLog("FAILED: Check if Universe ID is correct", "fail");
+            addLog("FAILED: Check if Universe ID belongs to you.", "fail");
         }
-    } catch (e) { addLog("CONNECTION ERROR", "error"); }
+    } catch (e) {
+        addLog("NETWORK ERROR.", "error");
+    }
 }
