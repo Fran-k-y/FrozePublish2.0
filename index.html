@@ -2,19 +2,20 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Studio Lite Pro</title>
+    <title>Studio Lite Ultra</title>
     <style>
-        body { background: #0a0a0a; color: white; font-family: sans-serif; text-align: center; padding: 15px; }
-        .app-container { background: #141414; border-radius: 20px; padding: 20px; border: 1px solid #333; max-width: 400px; margin: auto; }
-        h2 { color: #00ff00; margin-bottom: 20px; }
-        input { width: 100%; padding: 14px; margin: 8px 0; border-radius: 10px; border: 1px solid #333; background: #000; color: white; box-sizing: border-box; }
-        .nav { display: flex; gap: 10px; margin-bottom: 20px; background: #222; padding: 5px; border-radius: 12px; }
-        .nav-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; background: none; color: #777; font-weight: bold; }
+        body { background: #080808; color: white; font-family: sans-serif; text-align: center; padding: 15px; }
+        .app-container { background: #121212; border-radius: 20px; padding: 25px; border: 1px solid #222; max-width: 400px; margin: auto; }
+        h2 { color: #00ff00; margin-bottom: 20px; text-shadow: 0 0 10px rgba(0,255,0,0.3); }
+        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #333; background: #000; color: white; box-sizing: border-box; font-size: 14px; }
+        .nav { display: flex; gap: 10px; margin-bottom: 20px; background: #1a1a1a; padding: 5px; border-radius: 15px; }
+        .nav-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; background: none; color: #555; font-weight: bold; cursor: pointer; }
         .nav-btn.active { background: #00ff00; color: black; }
-        .main-btn { width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .main-btn { width: 100%; padding: 20px; border: none; border-radius: 15px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 16px; transition: 0.2s; }
         .btn-u { background: #00ff00; color: black; }
         .btn-p { background: #0088ff; color: white; }
-        #log { margin-top: 20px; padding: 15px; border-radius: 10px; background: #000; font-family: monospace; font-size: 11px; text-align: left; min-height: 120px; border: 1px solid #222; overflow-y: auto; }
+        .main-btn:active { transform: scale(0.96); }
+        #log { margin-top: 25px; padding: 15px; border-radius: 12px; background: #000; font-family: 'Courier New', monospace; font-size: 12px; text-align: left; min-height: 150px; border: 1px solid #222; overflow-y: auto; }
         .log-success { color: #00ff00; } 
         .log-error { color: #ffff00; }   
         .log-fail { color: #ff4444; }
@@ -23,20 +24,20 @@
 <body>
     <div class="app-container">
         <h2>STUDIO LITE</h2>
-        <input type="password" id="apiKey" placeholder="Paste API Key">
+        <input type="password" id="apiKey" placeholder="ENTER API KEY">
         <div class="nav">
-            <button class="nav-btn active" id="btnU" onclick="setMode('u')">Create Universe</button>
-            <button class="nav-btn" id="btnP" onclick="setMode('p')">Create Place</button>
+            <button class="nav-btn active" id="btnU" onclick="setMode('u')">UNIVERSE</button>
+            <button class="nav-btn" id="btnP" onclick="setMode('p')">PLACE</button>
         </div>
         <div id="sec-u">
-            <input type="text" id="expName" placeholder="New Experience Name">
-            <button class="main-btn btn-u" onclick="runCreate()">PUBLISH UNIVERSE</button>
+            <input type="text" id="expName" placeholder="New Game Name">
+            <button class="main-btn btn-u" onclick="runCreate()">CREATE EXPERIENCE</button>
         </div>
         <div id="sec-p" style="display:none;">
-            <input type="text" id="targetUniId" placeholder="Paste Universe ID here">
-            <button class="main-btn btn-p" onclick="runAddPlace()">PUBLISH PLACE</button>
+            <input type="text" id="targetUniId" placeholder="Paste Universe ID">
+            <button class="main-btn btn-p" onclick="runAddPlace()">ADD START PLACE</button>
         </div>
-        <div id="log"><div style="color:#444;">> Ready for task...</div></div>
+        <div id="log"><div style="color:#444;">> System Online...</div></div>
     </div>
     <script src="script.js"></script>
 </body>
